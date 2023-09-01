@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine as builder
+FROM golang:1.17-alpine as builder
 
 RUN apk update && apk add --no-cache alpine-sdk bash curl git ca-certificates openssl musl-dev && \
 	rm -rf /var/lib/apt/lists/*
