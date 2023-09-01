@@ -1,9 +1,8 @@
 name: Docker
 
 on:
-  push:
-    tags:
-      - '*'
+  pull_request:
+    branches: [ main ]
 
 jobs:
   docker:
