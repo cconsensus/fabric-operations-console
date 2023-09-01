@@ -16,10 +16,13 @@
 # limitations under the License.
 #
 ARG ARCH
-ARG GO_VER
+ARG GO_VER=1.17.7
 
 ########## Build deployer binary ##########
 FROM registry.access.redhat.com/ubi8/go-toolset:$GO_VER as builder
+
+go build -o /tmp/build/_output/bin/deployer github.com/IBM-Blockchain/fabric-deployer
+
 ADD . /go/src/github.com/IBM-Blockchain/fabric-deployer
 WORKDIR /go/src/github.com/IBM-Blockchain/fabric-deployer
 
@@ -28,9 +31,9 @@ RUN make build
 
 ########## Final image ##########
 FROM registry.access.redhat.com/ubi8/ubi-minimal
-ARG IBP_VER
-ARG BUILD_ID
-ARG BUILD_DATE
+# ARG IBP_VER
+# ARG BUILD_ID
+# ARG BUILD_DATE
 
 COPY --from=builder /tmp/build/_output/bin/deployer /usr/bin/deployer
 
@@ -44,12 +47,12 @@ RUN microdnf update \
     && microdnf install -y \
 		shadow-utils \
 		iputils \
-	&& groupadd -g 7051 ibp-user \
-	&& useradd -u 7051 -g ibp-user -s /bin/bash ibp-user \
+	&& groupadd -g 7051 fabric-user \
+	&& useradd -u 7051 -g fabric-user -s /bin/bash fabric-user \
 	&& mkdir /licenses \
 	&& microdnf remove shadow-utils \
 	&& microdnf clean all \
-	&& chown -R ibp-user:ibp-user licenses \
+	&& chown -R fabric-user:fabric-user licenses \
 	&& chmod 777 /docker-entrypoint.sh /usr/bin/start.sh
 
 ENV CONFIGPATH /configs/dev-config.yaml
@@ -57,6 +60,6 @@ ENV DBCONNECTIONSTRING ""
 ENV USERNAME ""
 ENV PASSWORD ""
 
-USER ibp-user
+USER fabric-user
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["sh", "-c", "start.sh"]
