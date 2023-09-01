@@ -5,7 +5,7 @@ on:
     tags:
       - 'v*.*.*'
     paths:
-      - 'pakages/fabric-deployer/**'
+      - 'packages/fabric-deployer/**'
 
 jobs:
   docker_build:
@@ -13,4 +13,4 @@ jobs:
     uses: ./.github/workflows/docker-build.yml
     with:
       image-name: ghcr.io/${{ github.repository }}/fabric-deployer
-      path: pakages/fabric-deployer
+      path: packages/fabric-deployer
