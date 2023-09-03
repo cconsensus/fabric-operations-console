@@ -56,4 +56,4 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         pull: true
-        outputs: ${{ inputs.path }}/../../packages/.
+        # outputs: ${{ inputs.path }}/../../packages/.
